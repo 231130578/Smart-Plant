@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Plant</title>
+
+    <style>
+      :root {
+  --bg-light: linear-gradient(135deg, #eef7f1, #e8f1f8);
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --border-soft: #d1e7dd;
+  --primary: #2f855a;
+  --primary-soft: #e6f4ea;
+  --text-main: #1f2937;
+  --text-muted: #6b7280;
+}
+
+/* ===== RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+  background: var(--bg-light);
+  min-height: 100vh;
+  padding: 20px;
+  color: var(--text-main);
+}
+
+/* ===== PAGE ===== */
+.page {
+  min-height: calc(100vh - 40px);
+}
+
+/* ===== CARD UTAMA ===== */
+.main-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 28px;
+  border: 1px solid var(--border-soft);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  animation: fadeIn 0.4s ease;
+}
+
+/* LOGIN */
+#loginPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#loginPage .main-card {
+  max-width: 520px;
+}
+
+/* TEXT */
+.title {
+  text-align: center;
+  font-size: 2.1rem;
+  font-weight: 700;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  margin-bottom: 22px;
+}
+
+/* FORM */
+label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+  display: block;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  margin-bottom: 16px;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(47, 133, 90, 0.25);
+}
+
+button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #276749;
+}
+
+/* ===== TOPBAR ===== */
+.topbar {
+  background: var(--card-bg);
+  border: 1px solid var(--border-soft);
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.top-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.top-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* STATUS BADGE */
+.connection-badge {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.connected {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.disconnected {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* ===== SENSOR CARD (FOKUS UTAMA) ===== */
+.sensor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+}
+
+.card {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.95),
+    rgba(240, 250, 245, 0.9)
+  );
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid var(--border-soft);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+.sensor-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--primary);
+}
+
+.status {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+/* ZOOM HALUS */
+.zoom-text {
+  animation: zoomPulse 4s ease-out infinite;
+}
+
+@keyframes zoomPulse {
+  0% { transform: scale(1); }
+  4% { transform: scale(1.12); }
+  8% { transform: scale(1); }
+}
+
+/* ===== DARK MODE ===== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-light: linear-gradient(135deg, #0f172a, #020617);
+    --card-bg: rgba(17, 24, 39, 0.92);
+    --border-soft: #1f2937;
+    --text-main: #e5e7eb;
+    --text-muted: #9ca3af;
+  }
+
+  input {
+    background: #020617;
+    color: white;
+    border-color: #1f2937;
+  }
+
+  .card {
+    background: rgba(17, 24, 39, 0.95);
+  }
+}
+    </style>
+  </head>
+  <body>
+    <!-- LOGIN PAGE -->
+    <div id="loginPage" class="page">
+      <div class="main-card">
+        <div class="title">🌱 Smart Plant</div>
+        <div class="subtitle">Masuk untuk memantau greenhouse</div>
+
+        <label>Email</label>
+        <input type="email" id="email" placeholder="caprian@gmail.com" />
+
+        <label>Password</label>
+        <input type="password" id="password" placeholder="••••••••" />
+
+        <div id="errorMsg" class="errorMsg"></div>
+
+        <button id="loginBtn" style="width: 100%; margin-top: 4px">
+          Masuk
+        </button>
+      </div>
+    </div>
+
+    <!-- DASHBOARD PAGE -->
+    <div id="dashboardPage" class="page" style="display: none">
+      <div class="dashboard-container">
+        <!-- NAVBAR / TOPBAR -->
+        <header class="topbar">
+          <div class="top-left">
+            <div class="top-title">Halo, Caprian 👋</div>
+            <div class="top-subtitle">
+              Selamat datang di Smart Plant Dashboard
+            </div>
+          </div>
+          <div class="top-right">
+            <div id="connectionStatus" class="connection-badge disconnected">
+              Disconnected
+            </div>
+            <button id="logoutBtn">Keluar</button>
+          </div>
+        </header>
+
+        <!-- ISI DASHBOARD -->
+        <div class="main-card">
+          <div class="subtitle subtitle-left">Kondisi greenhouse hari ini:</div>
+
+          <div class="sensor-grid">
+            <div class="card sensor-card">
+              <div class="sensor-label">Sensor 1</div>
+              <h3 class="value">Kelembaban Tanah 💧</h3>
+              <div id="soilMoisture" class="value zoom-text">-- %</div>
+              <div id="soilStatus" class="status"></div>
+            </div>
+
+            <div class="card sensor-card">
+              <div class="sensor-label">Sensor 2</div>
+              <h3 class="value">Tingkat Cahaya ☀️</h3>
+              <div id="lightLevel" class="value zoom-text">-- %</div>
+              <div id="lightStatus" class="status"></div>
+            </div>
+
+            <div class="card sensor-card">
+              <div class="sensor-label">Sensor 3</div>
+              <h3 class="value">Gerakan (PIR) 👣</h3>
+              <div id="motion" class="value zoom-text">--</div>
+              <div id="motionStatus" class="status"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const validEmail = "caprian@gmail.com";
+      const validPass = "caprian";
+
+      const loginPage = document.getElementById("loginPage");
+      const dashboardPage = document.getElementById("dashboardPage");
+      const errorMsg = document.getElementById("errorMsg");
+      const connectionStatus = document.getElementById("connectionStatus");
+
+      // FUNGSI STATUS KONEKSI
+      function setConnectionStatus(isConnected) {
+        if (!connectionStatus) return;
+        if (isConnected) {
+          connectionStatus.textContent = "Connected";
+          connectionStatus.classList.add("connected");
+          connectionStatus.classList.remove("disconnected");
+        } else {
+          connectionStatus.textContent = "Disconnected";
+          connectionStatus.classList.add("disconnected");
+          connectionStatus.classList.remove("connected");
+        }
+      }
+
+      // Default awal: belum terhubung
+      setConnectionStatus(false);
+
+      // LOGIN
+      document.getElementById("loginBtn").addEventListener("click", () => {
+        const email = document.getElementById("email").value.trim();
+        const pass = document.getElementById("password").value.trim();
+
+        if (email === validEmail && pass === validPass) {
+          errorMsg.textContent = "";
+          loginPage.style.display = "none";
+          dashboardPage.style.display = "block";
+          setConnectionStatus(true);
+        } else {
+          errorMsg.textContent = "Email atau password salah";
+        }
+      });
+
+      // LOGOUT
+      document.getElementById("logoutBtn").addEventListener("click", () => {
+        dashboardPage.style.display = "none";
+        loginPage.style.display = "flex";
+        setConnectionStatus(false);
+      });
+
+      // FUNGSI UPDATE SENSOR (bisa dipanggil dari Firebase / API)
+      function updateSoil(value) {
+        document.getElementById("soilMoisture").innerText = value + " %";
+        document.getElementById("soilStatus").innerText =
+          "Status: " + (value < 30 ? "Kering" : value < 70 ? "Cukup" : "Basah");
+      }
+
+      function updateLight(value) {
+        document.getElementById("lightLevel").innerText = value + " %";
+        document.getElementById("lightStatus").innerText =
+          "Status: " + (value < 30 ? "Redup" : value < 70 ? "Cukup" : "Terang");
+      }
+
+      function updateMotion(value) {
+        document.getElementById("motion").innerText = value
+          ? "Terdeteksi"
+          : "Tidak Terdeteksi";
+        document.getElementById("motionStatus").innerText =
+          "Status: " + (value ? "Ada Gerakan" : "Aman");
+      }
+
+      // ANIMASI DAUN
+      function spawnLeaf() {
+        const leaf = document.createElement("div");
+        leaf.classList.add("leaf");
+
+        const leaves = ["🌿", "🍃", "🍀", "🌱"];
+        leaf.innerText = leaves[Math.floor(Math.random() * leaves.length)];
+
+        leaf.style.left = Math.random() * 100 + "vw";
+        leaf.style.fontSize = Math.random() * 14 + 18 + "px";
+
+        const duration = Math.random() * 4 + 4;
+        leaf.style.animationDuration = duration + "s";
+
+        leaf.style.setProperty("--moveX", Math.random() * 80 - 40 + "vw");
+
+        document.body.appendChild(leaf);
+
+        setTimeout(() => leaf.remove(), duration * 1000);
+      }
+
+      setInterval(spawnLeaf, 700);
+    </script>
+  </body>
+</html>
